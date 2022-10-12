@@ -1,0 +1,6 @@
+A, N
+DF, B
+N
+D3
+E3
+E3 (FICHA OCUPADA)
