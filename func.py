@@ -8,7 +8,7 @@ Tablero: List(Ficha)
 
 Listado de funciones para hacer: 
 
-. Inicializar tablero
+. Inicializar tablero 
 . Determinar jugadores, que color le corresponde y quien inicia
 . Escribir jugadas
     | Chequear que la ficha este dentro del tablero
@@ -34,7 +34,7 @@ def inicializaTablero():
     """
     i = 0 #iterador
     tablero = []
-    fila = [' ' for x in range(8)]
+    fila = ['' for x in range(8)]
 
     while i < 8:
         tablero += [fila]
