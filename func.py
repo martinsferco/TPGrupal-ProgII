@@ -42,3 +42,25 @@ def inicializaTablero():
 
     return tablero
 
+def fichasIniciales(tablero): 
+    """
+    fichasIniciales :: List -> List
+    Coloca las fichas iniciales en el tablero
+    """
+
+    colorBlanco = True
+    x = 3
+
+    while colorBlanco:
+        tablero[x][x] = 'B'
+        tablero[x+1][x+1] = 'B'
+        colorBlanco = False
+    
+    while not colorBlanco:
+        tablero[x][x+1] = 'N'
+        tablero[x+1][x] = 'N'
+        colorBlanco = True
+
+    return tablero
+
+fichasIniciales(inicializaTablero()) #! NO FUNCIONA CORRECTAMENTE, BUSCAR POR QUE.
