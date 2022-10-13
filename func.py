@@ -26,3 +26,19 @@ P.D: Si un chequeo del paso escribir jugadas no se cumple, sale de la funcion,
 especifica cual fue el error, muestra el tablero y termina.
 
 """
+
+def inicializaTablero():
+    """ 
+    InicializaTablero:: None -> List 
+    Inicializa el tablero. Cada lista dentro de tablero representa una fila, y cada item dentro de dichas filas representa una casilla correspondiente.
+    """
+    i= 0 #iterador
+    tablero = []
+    fila = [' ' for x in range(8)]
+
+    while i < 8:
+        tablero += [fila]
+        i += 1
+
+    return tablero
+
