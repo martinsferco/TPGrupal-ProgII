@@ -53,10 +53,14 @@
 #
 #       # documentacion.py
 #       # main.py - Archivo de juego donde agrupamos todas las funciones.
-#       # func.py - Archivo donde diseñamos todas las funciones.
 #       # test.py - Archivo de test de las funciones.
+#       # tablero.py - Archivo con funciones relacionadas con el tablero.
+#       # verificacion_archivo.py - Archivo que contiene funciones que se 
+#         encargan de la lectura del archivo.
+#       # verificacion_fichas.py - Archivo con funciones que chequean jugadas.
+#       # verificacion_jugadores.py - Archivo con funciones que verifican 
+#         los datos preliminares.
 #       # assets - Carpeta que contiene las distintas partidas.
-#
 #
 #   # Inicio del programa:
 #                         Cuando ejecutemos el archivo main.py, nos pedirá 
@@ -69,9 +73,14 @@
 #                                Una vez que ejecutemos el archivo main.py, se
 #   irá ejecutando hasta que finalize la lectura del archivo de juego, o en 
 #   caso contrario, que nos encontremos con un error durante la lectura. También
-#   puede ocurrir que alguno de los datos delos jugadores esté mal.A continuación
+#   puede ocurrir que alguno de los datos delos jugadores esté mal. A continuación
 #   plantearemos las diferentes terminaciones del programa:
 # 
+#       # Errores en información de jugador:
+#           # Colores inválidos de los jugadores.
+#           # Colores repetidos en los jugadores.
+#           # Color de inicio incorrecto.
+
 #       # No existen errores en las jugadas:
 #           # Se colocaron todas las fichas del juego.
 #           # No se colocaron todas las fichas. La partida queda a medio
@@ -84,10 +93,6 @@
 #             del juego, dicha ficha no realiza cambios en el número de fichas.
 #           # Se saltea cuando no se debe saltar (consultar).
 #       
-#       # Errores en información de jugador:
-#           # Colores inválidos de los jugadores.
-#           # Colores repetidos en los jugadores.
-#           # Color de inicio incorrecto.
 #
 #   # Análisis de información de jugadores:
 #                                           Antes de comenzar con la lectura
@@ -101,7 +106,9 @@
 #   Haremos funciones individuales, que verifican cada uno de los posibles casos
 #   de finalización del programa y luego las agruparemos en una función que chequea
 #   cada jugada.
-#                                 
-#   
-#   Para Valenchu: Si te parece que tenemos que agregar, sacar o modificar algo
-#                  lo hablamos mañana y lo arreglamos. 
+#
+#       Relacionado con la representación de las fichas, cuando nos encontremos una 
+#   jugadas que se encuentra fuera de rango, la asociaremos con la tupla (-1,-1),ya 
+#   estas coordenadas no hacen referencia a ninguna del tablero.
+                         
+   
