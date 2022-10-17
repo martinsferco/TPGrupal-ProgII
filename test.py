@@ -11,7 +11,18 @@ def test_inicializarTablero():
     assert inicializarTablero() == [["","","","","","","",""],["","","","","","","",""],["","","","","","","",""],["","","","B","N","","",""],
                                     ["","","","N","B","","",""],["","","","","","","",""],["","","","","","","",""],["","","","","","","",""]]
 
+from verificacion_jugadores import *
 
+def test_verificaDatos():
+    assert verificaDatos('juego3.txt') ==  True
+
+def test_jugador():
+    assert jugador('Martin,N') == ('Martin', 'N')
+    assert jugador('Raul,B') == ('Raul', 'B')
+
+def test_coloresCorrectos():
+    assert coloresCorrectos(('Martin', 'N'), ('Raul', 'B')) == True
+    assert coloresCorrectos(('Martin', 'R'), ('Raul', 'V')) == False
 
 
 # Tests de funciones de verificación de fichas
