@@ -60,10 +60,5 @@ def mostrarTablero(tablero):
     print("\n-------------------------")
 
 
-tableroInicial = inicializarTablero()
-mostrarTablero(tableroInicial)
-
-
-
 
 
