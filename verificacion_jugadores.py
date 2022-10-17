@@ -1,0 +1,1 @@
+#Verificación de información de los jugadores

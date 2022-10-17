@@ -17,7 +17,7 @@
 #   de datos mutables, nos permiten ir modificando su contenido a lo largo 
 #   del programa.
 #
-#             Para trabajar de manera más comoda, relacionaremos cada una
+#             Para trabajar de manera más cómoda, relacionaremos cada una
 #   de las filas con números del 0 al 7. Lo mismo con las letras de las 
 #   columnas. De ésta manera, podremos asociar los datos pasados por el 
 #   archivo de juego, con los índices que tiene nuestra representación del
@@ -52,10 +52,10 @@
 #   archivos son:
 #
 #       # documentacion.py
-#       # main.py - Archivo de juego donde agrupamos las funciones.
+#       # main.py - Archivo de juego donde agrupamos todas las funciones.
 #       # func.py - Archivo donde diseñamos todas las funciones.
 #       # test.py - Archivo de test de las funciones.
-#       # asserts - Carpeta que contiene las distintas partidas.
+#       # assets - Carpeta que contiene las distintas partidas.
 #
 #
 #   # Inicio del programa:
