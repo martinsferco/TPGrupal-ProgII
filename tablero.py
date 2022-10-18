@@ -1,7 +1,5 @@
 #Inicialización tablero y mostrar tablero
 
-
-
 def inicializarTablero():
     """ 
     inicializarTablero:: None -> list(List(str))
@@ -24,7 +22,6 @@ def inicializarTablero():
     tablero[4][3] = fichaNegra
 
     return tablero
-
 
 
 def mostrarTablero(tablero):

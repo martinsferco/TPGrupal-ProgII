@@ -4,7 +4,7 @@ def verificacionFormato(coordenada):
     """
     verificacionFormato :: string -> bool
 
-    La función toma un strin no vacío leído del archivo de juego y 
+    La función toma un string no vacío leído del archivo de juego y 
     nos determina si tiene como primer valor un string y un número
     como segundo. También verifica que dicho string, tenga exactamente
     una longitud de dos.
