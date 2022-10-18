@@ -98,3 +98,4 @@ def fichasVolteadas(tablero,coordenada):
     jugada asociada a esa coordenada es incorrecta.
     """
     pass
+
