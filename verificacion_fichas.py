@@ -70,14 +70,31 @@ def convertirCoordenada(coordenada):
     return columnaEquivalente,filaEquivalente
 
 
+def verificacionOcupada(tablero,coordenada):
+    """
+    verificacionOcupada :: list(list(str)) str -> bool
+
+    Dado el tablero actual y una coordenada, nos indica si la casilla
+    en donde se quiere realizar la jugada se encuentra ocupada o no.
+    """
+    pass
 
 
 
 def fichasVolteadas(tablero,coordenada):
     """
-    fichasVolteadas :: list(list(str) str -> list(tuple(int))
+    fichasVolteadas :: list(list(str)) str -> list(tuple(int))
 
     Dado el tablero actual y una coordenada, nos devuelve una lista de
-    tuplas
+    tuplas, en donde cada una de las tuplas indica las coordenadas de
+    las fichas que se dieron vuelta gracias a la colocación de la ficha
+    pasada como argumento.
+    En caso de que la lista sea vacía, tenemos cuatro casos:
+    - Que la ficha no genéro cambios.
+    - Que la ficha no tiene el formato adecuado.
+    - Que la ficha no se encentra del rango adecuado.
+    - Que la casilla está ocupada.
+    En cualquiera de esos casos la lista es vacía, y por lo tanto, la 
+    jugada asociada a esa coordenada es incorrecta.
     """
     pass
