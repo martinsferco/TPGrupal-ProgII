@@ -1,6 +1,6 @@
 from tablero import inicializarTablero
-from verificacion_fichas import *
-from verificacion_jugadores import *
+from fichas import *
+from jugadores import *
 
 
 
@@ -55,7 +55,7 @@ def test_verfificacionRango():
     assert verificacionRango("A1")
     
 
-def test_verificacionOcupada():
+def test_ocupada():
     pass
 
 

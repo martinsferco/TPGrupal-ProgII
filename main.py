@@ -1,7 +1,9 @@
 # Main.py - Agrupamos todas las funciones
 
-from verificacion_archivo import *
-from verificacion_jugadores import *
+from archivos import *
+from jugadores import *
+from tablero import *
+
 
 def main():
     
@@ -29,6 +31,11 @@ def main():
     # especifica 
     
 
-main()
+
+    
+
+
+if __name__ == "__main__":
+    main()
 
 #print(verificaDatos('juego3.txt'))
