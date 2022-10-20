@@ -91,7 +91,7 @@ def ocupada(tablero,coordenada):
 
 
 
-def posicionesPermitidas(turnoActual,fichasJugadas):
+def posicionesPermitidas(turnoActual,fichasJugadas,tablero):
     """
     posicionesPermitidas :: str dict -> set((int,int))
 
@@ -101,10 +101,67 @@ def posicionesPermitidas(turnoActual,fichasJugadas):
     casilla permitida, el conjunto que se devuelve es vacío.
     """
 
-    pass
+    posicionesValidas = set()
+
+    vecinasColorOpuesto = vecinasLibresFichasOpuestas(turnoActual,fichasJugadas,tablero)
+
+    for coordenada in vecinasColorOpuesto:
+
+        if fichasVolteadas(tablero, coordenada) != []:
+
+            set.update([coordenada])
+
+    return posicionesValidas
+
+
+
+def vecinasLibresFichasOpuestas(turnoActual, fichasJugadas,tablero):
+    """
+    vecinasLibresFichaOpuesta :: str dict list(list(str)) -> set((int,int))
+
+    Dado el turno actual, las fichas ya colocadas y el tablero, nos devuelve un conjunto
+    con todas las casillas que son adyacentes a una ficha del color opuesto.
+    """
+
+    colorOpuesto = turnoOpuesto(turnoActual)
+
+    vecinasFichasOpuestas = set()
+
+    for coordenada in fichasJugadas[colorOpuesto]:
+
+        set.update(vecinasLibres(coordenada,tablero))
+
+    return vecinasFichasOpuestas
 
     
 
+
+
+def vecinasLibres(coordenada,tablero):
+    """
+    vecinasLibres :: (int,int) -> set((int,int))
+
+    Dada una coordenada y las fichas jugadas en el tablero, nos deveuelve
+    un conjunto con todas las casillas adyacantes libres a dicha coordenada.
+    """
+
+    vecinas = set()
+
+    columna,fila = coordenada
+
+    for x in range(columna-1,columna+2):
+
+        for y in range(fila-1,fila+2):
+
+            if (0<= x <=7) and (0 <= y <= 7) and not ocupada(tablero,coordenada):
+
+                vecinas.update([(x,y)])
+
+    
+    return vecinas
+
+
+# COMPLETAR - FUNCION IMPORTANTE
 def fichasVolteadas(tablero,coordenada):
     """
     fichasVolteadas :: list(list(str)) str -> list(tuple(int))
@@ -123,8 +180,26 @@ def fichasVolteadas(tablero,coordenada):
 
 def jugadaVerifica(jugadaActual,jugadasPosibles):
     """
+    jugadaVerifica :: str set((int,int)) -> bool
+
+    Dada la jugada actual leída del archivo de juego, y las posibles jugadas para
+    realizar, nos determina si la jugada que se realizó es correcta o no.
     """
-    pass
+    
+    
+    if jugadaActual == '\n': # Salto de turno
+        
+        return True if jugadasPosibles == {} else False
+
+    elif not verificacionRango or not verificacionFormato or ocupada: # No cumple con condiciones básicas
+
+        return False
+
+    
+    coordenada = convertirCoordenadas(jugadaActual)
+
+    return True if coordenada in jugadasPosibles else False
+          
 
 
 def darVueltaFichasTablero():
@@ -190,7 +265,7 @@ def volteadasHorizontalmente(tablero,coordenada,turnoActual):
 
 
 
-def volteadasVerticalmente():
+def volteadasVerticalmente(tablero,coordenada,turnoActual):
     """
     volteadasVerticalmente :: list(list(str)) (int,int) str -> list((int,int))
 
@@ -239,12 +314,105 @@ def volteadasVerticalmente():
 
 
 
-def volteadasDiagonalPrincipal():
-    pass
+def volteadasDiagonalDescendiente(tablero,coordenada,turnoActual):
+    """
+    volteadasDiagonalDescendiente :: list(list(str)) (int,int) str -> list((int,int))
+
+    Dado el tablero actual, la coordenada donde se coloca la ficha y el turno
+    que estamos chequeando, nos devuelve una lista de todas las fichas que hizo que
+    se den vuelta en la diagonal descendiente.
+    En caso de que la lista sea vacía, no modificó ninguna ficha.
+    """
+    
+    columna,fila = coordenada
+
+    colorOpuesto = turnoOpuesto(turnoActual)
+    
+    volteadasMitad1 = []
+    volteadasMitad2 = []
+    
+    # Recorremos hacia una mitad
+    fichasOpuestas = []
+    indiceX = columna + 1
+    indiceY = fila + 1
+
+    while indiceX <= 6 and indiceY <= 6  tablero[indiceX][indiceY] == colorOpuesto:    
+        
+        fichasOpuestas += [(indiceX,indiceY)]
+
+        if tablero[indiceX + 1][indiceY + 1] == turnoActual:
+            volteadasMitad1 += fichasOpuestas
+
+        indiceX += 1
+        indiceY += 1
+
+    # Recorremos hacia la otra mitad
+    fichasOpuestas = []
+    indiceX = columna - 1
+    indiceY = fila - 1
+
+    while indiceX >= 1 and indiceY >= 1 tablero[indiceX][indiceY] == colorOpuesto:    
+
+        fichasOpuestas += [(indiceX,indiceY)]
+
+        if tablero[indiceX - 1][indiceY - 1] == turnoActual:
+            volteadasMitad2 = fichasOpuestas
+
+        indiceX -= 1
+        indiceY -= 1
+
+    return volteadasMitad1 + volteadasMitad2
 
 
-def volteadasDiagonalSecundaria():
-    pass
+
+def volteadasDiagonalAscendiente():
+    """
+    volteadasDiagonalAscendiente :: list(list(str)) (int,int) str -> list((int,int))
+
+    Dado el tablero actual, la coordenada donde se coloca la ficha y el turno
+    que estamos chequeando, nos devuelve una lista de todas las fichas que hizo que
+    se den vuelta en la diagonal ascendiente.
+    En caso de que la lista sea vacía, no modificó ninguna ficha.
+    """
+    
+    columna,fila = coordenada
+
+    colorOpuesto = turnoOpuesto(turnoActual)
+    
+    volteadasMitad1 = []
+    volteadasMitad2 = []
+    
+    # Recorremos hacia una mitad
+    fichasOpuestas = []
+    indiceX = columna + 1
+    indiceY = fila - 1
+
+    while indiceX <= 6 and indiceY >= 1  tablero[indiceX][indiceY] == colorOpuesto:    
+        
+        fichasOpuestas += [(indiceX,indiceY)]
+
+        if tablero[indiceX + 1][indiceY - 1] == turnoActual:
+            volteadasMitad1 += fichasOpuestas
+
+        indiceX += 1
+        indiceY -= 1
+
+    # Recorremos hacia la otra mitad
+    fichasOpuestas = []
+    indiceX = columna - 1
+    indiceY = fila + 1
+
+    while indiceX >= 1 and indiceY >= 1 tablero[indiceX][indiceY] == colorOpuesto:    
+
+        fichasOpuestas += [(indiceX,indiceY)]
+
+        if tablero[indiceX - 1][indiceY - 1] == turnoActual:
+            volteadasMitad2 = fichasOpuestas
+        
+        indiceX -= 1
+        indiceY += 1
+
+    return volteadasMitad1 + volteadasMitad2
 
 
 

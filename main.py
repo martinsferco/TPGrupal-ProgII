@@ -4,6 +4,7 @@ from tablero import *
 from os import system
 
 def main():
+
     
     archivo = ingresaArchivo()
     print(archivo)
