@@ -9,13 +9,15 @@ cantidadFichasBlancas = len(fichasBlancas)
 
 turnoActual = archivo.readline()
 
-posiblesJugadas = actualesPosiblesJugadas(tablero,turnoActual,fichasJugadas[turnoOpuesto(turnoActual)]) # Vemos que jugadas se pueden realizar
+posiblesJugadas = actualesPosiblesJugadas(tablero,turnoActual,fichasJugadas) # Vemos que jugadas se pueden realizar
 
 jugadaActual = archivo.readline() # Vemos la jugada actual
 
 while jugadaVerifica(jugadaActual,posiblesJugadas): # Verificamos que sea una jugada valida
+    
+    jugadaActual = convertirCoordenadas()
 
-    fichasVolteadas = volteadas(jugadaActual, tablero) # Vemos que fichas se dan vuelta con dicha jugada
+    fichasVolteadas = fichasVolteadas(jugadaActual, tablero) # Vemos que fichas se dan vuelta con dicha jugada
 
     tablero = darVueltaFichasTablero() # Modificamos el tablero
 
