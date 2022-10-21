@@ -5,12 +5,14 @@ from fichas import *
 
 def main():
 
-    
-    archivo = ingresaArchivo()
-    print(archivo)
+    nombreArchivo = input("Introduzca el archivo de jugadas: ")
 
-    # Si alguno de los datos preliminares es incorrecto no ejecutamos nada.
-    if not verificaDatos(archivo):
+    while not ingresaArchivo(nombreArchivo): #SI EL ARCHIVO NO SE ENCUENTRA LO SIGUE PIDIENDO.
+        nombreArchivo = input("Introduzca el archivo de jugadas: ")
+
+    archivo = open(nombreArchivo + '.txt', 'r') #UNA VEZ ENCONTRADO EL ARCHIVO, LO ABRE
+
+    if not verificaDatos(archivo): # Si alguno de los datos preliminares es incorrecto no ejecutamos nada.
         print('El archivo ingresado tiene fallos. No se podrá jugar la partida.')
         return 
     
@@ -19,9 +21,9 @@ def main():
 
     archivo.seek(0) # Volvemos al comienzo del archivo.
 
-    jugador1 = jugador(archivo.readline())
-    jugador2 = jugador(archivo.readline())
-    turnoInicial = archivo.readline()[:-1] # Eliminamos el '\n'
+    jugador1 = jugador(archivo.readline()) #fila 1 correspondiente al jugador 1
+    jugador2 = jugador(archivo.readline()) #fila 2 correspondiente al jugador 2
+    turnoInicial = archivo.readline()[:-1] # Eliminamos el '\n' con [:-1] de la fila 3
 
     print('El jugador 1 es', jugador1[0], 'con el color', jugador1[1])
     print('El jugador 2 es', jugador2[0], 'con el color', jugador2[1])

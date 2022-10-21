@@ -1,7 +1,7 @@
 from tablero import inicializarTablero
 from fichas import *
 from jugadores import *
-
+from archivos import ingresaArchivo
 
 
 # Tests de funciones de tablero
@@ -41,6 +41,14 @@ def test_coloresCorrectos():
     assert coloresCorrectos(('Martin', 'N'), ('Raul', 'B')) == True
     assert coloresCorrectos(('Martin', 'R'), ('Raul', 'V')) == False
 
+# Test de funciones de ingreso de archivo
+
+def test_ingresaArchivo():
+
+    assert ingresaArchivo('juego1') == True
+    assert ingresaArchivo('hola') == False
+    assert ingresaArchivo('lcc') == False
+    assert ingresaArchivo('juego2') == True
 
 
 

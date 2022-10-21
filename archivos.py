@@ -1,27 +1,23 @@
-#Correcta lectura del arhivo 
+#Correcta lectura del archivo 
 
-def ingresaArchivo():
+def ingresaArchivo(nombreArchivo):
     """
-    ingresaArchivo :: None -> File
+    ingresaArchivo :: str -> bool
 
-    . Chequea que el archivo el archivo existe. Devuelve el archivo abierto a la funcion main.
+    . Chequea que el archivo existe. Devuelve true si existe, false si no.
     """
     
-    nombreArchivo = input("Introduzca el archivo de jugadas: ")
     archivoEnExtension = nombreArchivo + '.txt'
     
-    while not chequeaArchivo(archivoEnExtension): # SI NO SE ENCUENTRA EL ARCHIVO, REINTENTA.
-        nombreArchivo = input("Introduzca el archivo de jugadas: ")
-        archivoEnExtension = nombreArchivo + '.txt'
+    if not chequeaArchivo(archivoEnExtension): # SI EL ARCHIVO NO EXISTE, DEVUELVE FALSE
+        print('\nEl archivo no ha sido encontrado. ')
+        return False
     
-    archivo = open(archivoEnExtension)
+    return True
     
-    return archivo
-    
-
 def chequeaArchivo(archivoEnExtension):
     """
-    chequeaArchivo :: string -> bool
+    chequeaArchivo :: str -> bool
 
     . Chequea que el archivo exista en el directorio. Si existe, devuelve true, sino devuelve false.
     """
@@ -31,9 +27,9 @@ def chequeaArchivo(archivoEnExtension):
         archivoExiste.close()
 
     except:
-        print('\nEl archivo no ha sido encontrado. ')
         return False
         
     else: 
         return True
-    
+
+
