@@ -76,22 +76,38 @@ def convertirCoordenadas(coordenada):
 
 
 
-def ocupada(tablero,coordenada):
+def ocupada(fichasJugadas,coordenada):
     """
-    verificacionOcupada :: list(list(str)) (int,int) -> bool
+    verificacionOcupada :: dict (int,int) -> bool
 
-    Dado el tablero actual y una coordenada, nos indica si la casilla
+    Dada las fichas jugadas y una coordenada, nos indica si la casilla
     en donde se quiere realizar la jugada se encuentra ocupada o no.
     """
-    
-    columna,fila = coordenada
 
-    return False if tablero[columna][fila] == "" else True
+    return (coordenada in fichasJugadas["B"]) or (coordenada in fichasJugadas["N"])
 
 
 
 
-def posicionesPermitidas(turnoActual,fichasJugadas,tablero):
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def posicionesPermitidas(turnoActual,fichasJugadas):
     """
     posicionesPermitidas :: str dict -> set((int,int))
 
@@ -103,23 +119,23 @@ def posicionesPermitidas(turnoActual,fichasJugadas,tablero):
 
     posicionesValidas = set()
 
-    vecinasColorOpuesto = vecinasLibresFichasOpuestas(turnoActual,fichasJugadas,tablero)
-
+    vecinasColorOpuesto = vecinasLibresFichasOpuestas(turnoActual,fichasJugadas)
+ 
     for coordenada in vecinasColorOpuesto:
 
-        if fichasVolteadas(tablero, coordenada) != []:
+        if fichasVolteadas(fichasJugadas,turnoActual,coordenada) != []:
 
-            set.update([coordenada])
+            posicionesValidas.update([coordenada])
 
     return posicionesValidas
 
 
 
-def vecinasLibresFichasOpuestas(turnoActual, fichasJugadas,tablero):
+def vecinasLibresFichasOpuestas(turnoActual, fichasJugadas):
     """
-    vecinasLibresFichaOpuesta :: str dict list(list(str)) -> set((int,int))
+    vecinasLibresFichaOpuesta :: str dict -> set((int,int))
 
-    Dado el turno actual, las fichas ya colocadas y el tablero, nos devuelve un conjunto
+    Dado el turno actual y las fichas ya colocadas, nos devuelve un conjunto
     con todas las casillas que son adyacentes a una ficha del color opuesto.
     """
 
@@ -129,20 +145,20 @@ def vecinasLibresFichasOpuestas(turnoActual, fichasJugadas,tablero):
 
     for coordenada in fichasJugadas[colorOpuesto]:
 
-        set.update(vecinasLibres(coordenada,tablero))
-
+        vecinasFichasOpuestas.update(vecinasLibres(coordenada,fichasJugadas))
+        
     return vecinasFichasOpuestas
 
     
 
 
 
-def vecinasLibres(coordenada,tablero):
+def vecinasLibres(coordenada,fichasJugadas):
     """
     vecinasLibres :: (int,int) -> set((int,int))
 
-    Dada una coordenada y las fichas jugadas en el tablero, nos deveuelve
-    un conjunto con todas las casillas adyacantes libres a dicha coordenada.
+    Dada una coordenada de ficha y las fichas jugadas en el tablero, nos devuelve
+    un conjunto con todas las casillas adyacantes libres a dicha ficha
     """
 
     vecinas = set()
@@ -153,18 +169,19 @@ def vecinasLibres(coordenada,tablero):
 
         for y in range(fila-1,fila+2):
 
-            if (0<= x <=7) and (0 <= y <= 7) and not ocupada(tablero,coordenada):
+            if (0<= x <=7) and (0 <= y <= 7) and not ocupada(fichasJugadas,(x,y)):
 
                 vecinas.update([(x,y)])
+ 
+    # Eliminamos la propia casilla
+    vecinas.discard(coordenada)
 
-    
     return vecinas
 
 
-# COMPLETAR - FUNCION IMPORTANTE
-def fichasVolteadas(tablero,coordenada):
+def fichasVolteadas(fichasJugadas,turnoActual,coordenada):
     """
-    fichasVolteadas :: list(list(str)) str -> list(tuple(int))
+    fichasVolteadas :: list(list(str)) (int,int) str -> list((int,int))
 
     Dado el tablero actual y una coordenada, nos devuelve una lista de
     tuplas, en donde cada una de las tuplas indica las coordenadas de
@@ -175,8 +192,16 @@ def fichasVolteadas(tablero,coordenada):
     - Que la jugada era un salteo de turno.
     En ambos casos la lista devuelta es vacía.
     """
-    pass
-
+    
+    if coordenada == (-1,-1): # Salto de jugada
+        return []
+    
+    horizontal = volteadasHorizontalmente(fichasJugadas,coordenada,turnoActual)
+    vertical = volteadasVerticalmente(fichasJugadas,coordenada,turnoActual)
+    diagonal1 = volteadasDiagonalDescendiente(fichasJugadas,coordenada,turnoActual)
+    diagonal2 = volteadasDiagonalAscendiente(fichasJugadas,coordenada,turnoActual)
+    
+    return horizontal + vertical + diagonal1 + diagonal2
 
 def jugadaVerifica(jugadaActual,jugadasPosibles):
     """
@@ -191,42 +216,104 @@ def jugadaVerifica(jugadaActual,jugadasPosibles):
         
         return True if jugadasPosibles == {} else False
 
-    elif not verificacionRango or not verificacionFormato or ocupada: # No cumple con condiciones básicas
+    elif not verificacionRango or not verificacionFormato: # No cumple con condiciones básicas
 
         return False
-
     
     coordenada = convertirCoordenadas(jugadaActual)
 
-    return True if coordenada in jugadasPosibles else False
+    return True if coordenada in jugadasPosibles else False # Vemos dentro de las jugadas posibles
           
 
 
-def darVueltaFichasTablero():
+def darVueltaFichasTablero(tablero,turnoActual,fichasModificadas):
     """
+    darVueltaFichasTablero :: list(list(str)) list((int,int)) -> list(list(str))
+
+    Dado el tablero actual, el turno actual y las fichas que fueron modificadas,
+    nos devuelve un nuevo tablero con todas las fichas cambiadas al color del
+    turno actual.
     """
-    pass
+
+    for columna,fila in fichasModificadas:
+
+        tablero[columna][fila] = turnoActual
+
+    return tablero
 
 
-def actualizarFichasJugadas():
+def actualizarFichasJugadas(fichasJugadas,fichasModificadas,turnoActual):
     """
+    actualizarFichasJugadas :: dict list((int,int)) str -> dic
+
+    Dada las fichas jugadas, las fichas que debemos modificar y el turno actual, 
+    nos devuelve las nuevas posiciones de las fichas jugadas.
     """
-    pass
+
+    for ficha in fichasModificadas:
+
+        fichasJugadas[turnoActual].update([ficha])
+        fichasJugadas[turnoOpuesto(turnoActual)].discard(ficha)
+   
+    return fichasJugadas
 
 
 
 
 
-def volteadasHorizontalmente(tablero,coordenada,turnoActual):
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def volteadasHorizontalmente(fichasJugadas,coordenada,turnoActual):
     """
-    volteadasHorizontalmente :: list(list(str)) (int,int) str -> list((int,int))
+    volteadasHorizontalmente :: dict (int,int) str -> list((int,int))
 
-    Dado el tablero actual, la coordenada donde se coloca la ficha y el turno
+    Dadas las fichas jugadas, la coordenada donde se coloca la ficha y el turno
     que estamos chequeando, nos devuelve una lista de todas las fichas que hizo que
     se den vuelta horizontalmente. En caso de que la lista sea vacía, no modificó 
     ninguna ficha.
     """
-    
     columna,fila = coordenada
 
     colorOpuesto = turnoOpuesto(turnoActual)
@@ -238,11 +325,11 @@ def volteadasHorizontalmente(tablero,coordenada,turnoActual):
     fichasOpuestas = []
     indice = columna + 1
 
-    while indice <= 6 and tablero[indice][fila] == colorOpuesto:    
+    while indice <= 6 and (indice,fila) in fichasJugadas[colorOpuesto]:    
         
         fichasOpuestas += [(indice,fila)]
 
-        if tablero[indice + 1][fila] == turnoActual:
+        if (indice + 1,fila) in fichasJugadas[turnoActual]:
             volteadasDerecha += fichasOpuestas
         
         indice += 1
@@ -251,11 +338,11 @@ def volteadasHorizontalmente(tablero,coordenada,turnoActual):
     fichasOpuestas = []
     indice = columna - 1
 
-    while indice >= 1 and tablero[indice][fila] == colorOpuesto:    
+    while indice >= 1 and (indice,fila) in fichasJugadas[colorOpuesto]:    
 
         fichasOpuestas += [(indice,fila)]
 
-        if tablero[indice - 1][fila] == turnoActual:
+        if (indice - 1,fila) in fichasJugadas[turnoActual]:
             volteadasIzquierda = fichasOpuestas
 
         indice -= 1
@@ -265,11 +352,11 @@ def volteadasHorizontalmente(tablero,coordenada,turnoActual):
 
 
 
-def volteadasVerticalmente(tablero,coordenada,turnoActual):
+def volteadasVerticalmente(fichasJugadas,coordenada,turnoActual):
     """
-    volteadasVerticalmente :: list(list(str)) (int,int) str -> list((int,int))
+    volteadasVerticalmente :: dict (int,int) str -> list((int,int))
 
-    Dado el tablero actual, la coordenada donde se coloca la ficha y el turno
+    Dadas las fichas jugadas, la coordenada donde se coloca la ficha y el turno
     que estamos chequeando, nos devuelve una lista de todas las fichas que hizo que
     se den vuelta verticalmente. En caso de que la lista sea vacía, no modificó 
     ninguna ficha.
@@ -286,11 +373,11 @@ def volteadasVerticalmente(tablero,coordenada,turnoActual):
     fichasOpuestas = []
     indice = fila + 1
 
-    while indice <= 6 and tablero[columna][indice] == colorOpuesto:    
+    while indice <= 6 and (columna,indice) in fichasJugadas[colorOpuesto]:    
         
         fichasOpuestas += [(columna,indice)]
 
-        if tablero[columna][indice + 1] == turnoActual:
+        if (columna,indice + 1) in fichasJugadas[turnoActual]:
             volteadasArriba += fichasOpuestas
 
         indice += 1
@@ -299,11 +386,11 @@ def volteadasVerticalmente(tablero,coordenada,turnoActual):
     fichasOpuestas = []
     indice = fila - 1
 
-    while indice >= 1 and tablero[columna][indice] == colorOpuesto:    
+    while indice >= 1 and (columna,indice) in fichasJugadas[colorOpuesto]:    
 
         fichasOpuestas += [(columna,indice)]
 
-        if tablero[columna][indice - 1] == turnoActual:
+        if (columna,indice - 1) in fichasJugadas[turnoActual]:
             volteadasAbajo = fichasOpuestas
 
         indice -= 1
@@ -314,11 +401,11 @@ def volteadasVerticalmente(tablero,coordenada,turnoActual):
 
 
 
-def volteadasDiagonalDescendiente(tablero,coordenada,turnoActual):
+def volteadasDiagonalDescendiente(fichasJugadas,coordenada,turnoActual):
     """
-    volteadasDiagonalDescendiente :: list(list(str)) (int,int) str -> list((int,int))
+    volteadasDiagonalDescendiente :: dict (int,int) str -> list((int,int))
 
-    Dado el tablero actual, la coordenada donde se coloca la ficha y el turno
+    Dadas las fichas jugadas, la coordenada donde se coloca la ficha y el turno
     que estamos chequeando, nos devuelve una lista de todas las fichas que hizo que
     se den vuelta en la diagonal descendiente.
     En caso de que la lista sea vacía, no modificó ninguna ficha.
@@ -336,11 +423,11 @@ def volteadasDiagonalDescendiente(tablero,coordenada,turnoActual):
     indiceX = columna + 1
     indiceY = fila + 1
 
-    while indiceX <= 6 and indiceY <= 6  tablero[indiceX][indiceY] == colorOpuesto:    
+    while indiceX <= 6 and indiceY <= 6 and (indiceX,indiceY) in fichasJugadas[colorOpuesto]:    
         
         fichasOpuestas += [(indiceX,indiceY)]
 
-        if tablero[indiceX + 1][indiceY + 1] == turnoActual:
+        if (indiceX + 1,indiceY + 1) in fichasJugadas[turnoActual]:
             volteadasMitad1 += fichasOpuestas
 
         indiceX += 1
@@ -351,11 +438,11 @@ def volteadasDiagonalDescendiente(tablero,coordenada,turnoActual):
     indiceX = columna - 1
     indiceY = fila - 1
 
-    while indiceX >= 1 and indiceY >= 1 tablero[indiceX][indiceY] == colorOpuesto:    
+    while indiceX >= 1 and indiceY >= 1 and (indiceX,indiceY) in fichasJugadas[colorOpuesto]:    
 
         fichasOpuestas += [(indiceX,indiceY)]
 
-        if tablero[indiceX - 1][indiceY - 1] == turnoActual:
+        if (indiceX - 1,indiceY - 1) in fichasJugadas[turnoActual]:
             volteadasMitad2 = fichasOpuestas
 
         indiceX -= 1
@@ -365,11 +452,11 @@ def volteadasDiagonalDescendiente(tablero,coordenada,turnoActual):
 
 
 
-def volteadasDiagonalAscendiente():
+def volteadasDiagonalAscendiente(fichasJugadas,coordenada,turnoActual):
     """
-    volteadasDiagonalAscendiente :: list(list(str)) (int,int) str -> list((int,int))
+    volteadasDiagonalAscendiente :: dict (int,int) str -> list((int,int))
 
-    Dado el tablero actual, la coordenada donde se coloca la ficha y el turno
+    Dadas las fichas jugadas, la coordenada donde se coloca la ficha y el turno
     que estamos chequeando, nos devuelve una lista de todas las fichas que hizo que
     se den vuelta en la diagonal ascendiente.
     En caso de que la lista sea vacía, no modificó ninguna ficha.
@@ -387,11 +474,11 @@ def volteadasDiagonalAscendiente():
     indiceX = columna + 1
     indiceY = fila - 1
 
-    while indiceX <= 6 and indiceY >= 1  tablero[indiceX][indiceY] == colorOpuesto:    
+    while indiceX <= 6 and indiceY >= 1 and (indiceX,indiceY) in fichasJugadas[colorOpuesto]:    
         
         fichasOpuestas += [(indiceX,indiceY)]
 
-        if tablero[indiceX + 1][indiceY - 1] == turnoActual:
+        if (indiceX + 1,indiceY - 1) in fichasJugadas[turnoActual]:
             volteadasMitad1 += fichasOpuestas
 
         indiceX += 1
@@ -402,11 +489,11 @@ def volteadasDiagonalAscendiente():
     indiceX = columna - 1
     indiceY = fila + 1
 
-    while indiceX >= 1 and indiceY >= 1 tablero[indiceX][indiceY] == colorOpuesto:    
+    while indiceX >= 1 and indiceY >= 1 and (indiceX,indiceY) in fichasJugadas[colorOpuesto]:    
 
         fichasOpuestas += [(indiceX,indiceY)]
 
-        if tablero[indiceX - 1][indiceY - 1] == turnoActual:
+        if (indiceX - 1,indiceY + 1) in fichasJugadas[turnoActual]:
             volteadasMitad2 = fichasOpuestas
         
         indiceX -= 1

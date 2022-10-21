@@ -1,7 +1,7 @@
 from archivos import *
 from jugadores import *
 from tablero import *
-from os import system
+from fichas import *
 
 def main():
 
@@ -21,10 +21,11 @@ def main():
 
     jugador1 = jugador(archivo.readline())
     jugador2 = jugador(archivo.readline())
+    turnoInicial = archivo.readline()[:-1] # Eliminamos el '\n'
 
     print('El jugador 1 es', jugador1[0], 'con el color', jugador1[1])
     print('El jugador 2 es', jugador2[0], 'con el color', jugador2[1])
-    print('Inicia el color', archivo.readline())
+    print('Inicia el color', turnoInicial)
 
     # A partir de ahora, ya tenemos las condiciones de inicio, los jugadores y el color que arranca.
     
@@ -37,28 +38,36 @@ def main():
     tablero = inicializarTablero()
     
     fichasJugadas = {"B":{(3,3),(4,4)},"N":{(3,4),(4,3)}}
-a
-    turnoActual = archivo.readline() # Lo leo en formato string
 
-    jugadasPosibles = posicionesPermitidas(turnoActual,fichasJugadas)
+    turnoActual = turnoInicial 
 
-    jugadaActual = arhivo.readline() # Leo la jugada en formato string
-
+    jugadasPosibles = posicionesPermitidas(turnoActual,fichasJugadas) # Vemos las posiciones válidas
+    
+    jugadaActual = archivo.readline() # Leo la jugada en formato string
+    
     while jugadaVerifica(jugadaActual,jugadasPosibles):
 
-        jugadaActual = convertirCoordenadas()
+        jugadaActual = convertirCoordenadas(jugadaActual) 
 
-        fichasModificadas = fichasVolteadas(jugadaActual,tablero)
+        fichasModificadas = fichasVolteadas(fichasJugadas,turnoActual,jugadaActual) + [jugadaActual] # Que fichas se dan vuelta
 
-        tablero = darVueltaFichasTablero(tablero,jugadaActual,fichasModificadas)
+        if len(fichasModificadas) != 1: # Vemos que la jugada actual no sea un salteo de turno
+         
+            tablero = darVueltaFichasTablero(tablero,turnoActual,fichasModificadas) # Modificamos nuestro tablero
     
-        fichasJugadas[turnoActual],fichasJugadas[turnoOpuesto(turnoActual)] = actualizarFichasJugadas(fichasJugadas,fichasVolteadas)
+            fichasJugadas = actualizarFichasJugadas(fichasJugadas,fichasModificadas,turnoActual) # Modificamos fichas
+        
+        mostrarTablero(tablero)
 
-        turnoActual = turnoOpuesto(turnoActual)
+        turnoActual = turnoOpuesto(turnoActual) # Cambiamos el turno
 
-        # Repetimos todo lo anterior
+        jugadasPosibles = posicionesPermitidas(turnoActual,fichasJugadas) # Vemos las posiciones válidas
 
-
+        jugadaActual = archivo.readline() # Leemos la nueva jugada
+        
+    archivo.close()
+    
+    print("Cantidad fichas: ",len(fichasJugadas["B"])+len(fichasJugadas["N"]))
     mostrarTablero(tablero)
 
 
@@ -66,5 +75,6 @@ a
 
 if __name__ == "__main__":
     main()
+
 
 #print(verificaDatos('juego3.txt'))

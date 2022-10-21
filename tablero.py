@@ -37,19 +37,19 @@ def mostrarTablero(tablero):
 
     #Imprimimos el tablero
 
-    for columna in tablero:
+    for fila in range(8):
         
         print("\n-------------------------")
 
-        for fila in columna:
+        for columna in tablero:
 
-            if fila == "":
+            if columna[fila] == "":
                 print('|  ',end = "")
 
-            if fila == "B":
+            if columna[fila] == "B":
                 print(f'|{fichaBlanca}',end = "")
 
-            if fila == "N":
+            if columna[fila] == "N":
                 print(f'|{fichaNegra}',end = "")
         
         print('|',end = "")
