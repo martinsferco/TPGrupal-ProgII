@@ -95,8 +95,10 @@ def test_ocupada():
 
 
 def test_posicionesPermitidas():
-    pass
+    fichasJugadas = {"B":{(4,4),(3,3)},"N":{(3,4),(4,3)}}
 
+    assert posicionesPermitidas("B",fichasJugadas) == {(4,2),(2,4),(3,5),(5,3)}
+    assert posicionesPermitidas("N",fichasJugadas) == {(3,2),(2,3),(4,5),(5,4)}
 
 def test_vecinasLibresFichasOpuestas():
     fichasJugadas = {"B":{(4,4),(3,3)},"N":{(3,4),(4,3)}}

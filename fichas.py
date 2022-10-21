@@ -34,10 +34,9 @@ def verificacionRango(coordenada):
     Dado un string no vacío, nos determina si dicha coordenada
     se encuentra dentro de los límites del tablero.
     """
-    
     if not verificacionFormato(coordenada):
         return False
-
+ 
     columnas = ['A','B','C','D','E','F','G','H']
 
     columna = coordenada[0].upper()
@@ -216,7 +215,7 @@ def jugadaVerifica(jugadaActual,jugadasPosibles):
         
         return True if jugadasPosibles == {} else False
 
-    elif not verificacionRango or not verificacionFormato: # No cumple con condiciones básicas
+    elif not verificacionRango(jugadaActual) or not verificacionFormato(jugadaActual): # No cumple con condiciones básicas
 
         return False
     
