@@ -7,19 +7,16 @@ def verificacionFormato(coordenada):
     como segundo. También verifica que dicho string, tenga exactamente
     una longitud de dos.
     """
-
-    if len(coordenada) != 2:
-        print("Las coordenadas solo deben tener dos componentes.")
+    
+    if len(coordenada) != 2 and len(coordenada) != 0: # Que tenga dos coordenadas (no cuenta el salto de turno)
         return False
     
     columna, fila = coordenada[0],coordenada[1]
         
-    if not columna.isalpha():
-        print("Las columnas deben ser representada con letras.")
+    if not columna.isalpha(): # No verifica que la columna sea una letra
         return False
 
-    if not fila.isdigit():
-        print("Las filas deben ser representadas con números.")
+    if not fila.isdigit(): # No verifica que la fila sea un número
         return False
 
     return True
@@ -34,9 +31,7 @@ def verificacionRango(coordenada):
     Dado un string no vacío, nos determina si dicha coordenada
     se encuentra dentro de los límites del tablero.
     """
-    if not verificacionFormato(coordenada):
-        return False
- 
+    
     columnas = ['A','B','C','D','E','F','G','H']
 
     columna = coordenada[0].upper()
@@ -122,7 +117,7 @@ def posicionesPermitidas(turnoActual,fichasJugadas):
  
     for coordenada in vecinasColorOpuesto:
 
-        if fichasVolteadas(fichasJugadas,turnoActual,coordenada) != []:
+        if fichasVolteadas(fichasJugadas,turnoActual,coordenada) != set():
 
             posicionesValidas.update([coordenada])
 
@@ -180,7 +175,7 @@ def vecinasLibres(coordenada,fichasJugadas):
 
 def fichasVolteadas(fichasJugadas,turnoActual,coordenada):
     """
-    fichasVolteadas :: list(list(str)) (int,int) str -> list((int,int))
+    fichasVolteadas : list(list(str)) str (int,int) -> set((int,int))
 
     Dado el tablero actual y una coordenada, nos devuelve una lista de
     tuplas, en donde cada una de las tuplas indica las coordenadas de
@@ -189,18 +184,18 @@ def fichasVolteadas(fichasJugadas,turnoActual,coordenada):
     Tenemos también 2 casos especiales:
     - Que la jugada no genéro cambios.
     - Que la jugada era un salteo de turno.
-    En ambos casos la lista devuelta es vacía.
+    En ambos casos el conjunto devuelto es vacío.
     """
     
     if coordenada == (-1,-1): # Salto de jugada
-        return []
+        return set()
     
     horizontal = volteadasHorizontalmente(fichasJugadas,coordenada,turnoActual)
     vertical = volteadasVerticalmente(fichasJugadas,coordenada,turnoActual)
     diagonal1 = volteadasDiagonalDescendiente(fichasJugadas,coordenada,turnoActual)
     diagonal2 = volteadasDiagonalAscendiente(fichasJugadas,coordenada,turnoActual)
     
-    return horizontal + vertical + diagonal1 + diagonal2
+    return (horizontal | vertical | diagonal1 | diagonal2 )
 
 def jugadaVerifica(jugadaActual,jugadasPosibles):
     """
@@ -211,17 +206,23 @@ def jugadaVerifica(jugadaActual,jugadasPosibles):
     """
     
     
-    if jugadaActual == '\n': # Salto de turno
+    if jugadaActual == '': # Salto de turno
         
-        return True if jugadasPosibles == {} else False
+        return True if jugadasPosibles == set() else False
 
-    elif not verificacionRango(jugadaActual) or not verificacionFormato(jugadaActual): # No cumple con condiciones básicas
-
-        return False
     
+    if not verificacionFormato(jugadaActual):
+        print("La jugada no cumple con el formato estipulado.")
+        return False
+
+    if not verificacionRango(jugadaActual):
+        print("La jugada se sale fuera del rango del tablero.")
+        return False
+   
     coordenada = convertirCoordenadas(jugadaActual)
 
-    return True if coordenada in jugadasPosibles else False # Vemos dentro de las jugadas posibles
+    # Vemos si la jugada se encuentra dentro de las posibles
+    return True if coordenada in jugadasPosibles else False 
           
 
 
@@ -306,19 +307,19 @@ def actualizarFichasJugadas(fichasJugadas,fichasModificadas,turnoActual):
 
 def volteadasHorizontalmente(fichasJugadas,coordenada,turnoActual):
     """
-    volteadasHorizontalmente :: dict (int,int) str -> list((int,int))
+    volteadasHorizontalmente :: dict (int,int) str -> set((int,int))
 
     Dadas las fichas jugadas, la coordenada donde se coloca la ficha y el turno
-    que estamos chequeando, nos devuelve una lista de todas las fichas que hizo que
-    se den vuelta horizontalmente. En caso de que la lista sea vacía, no modificó 
+    que estamos chequeando, nos devuelve un conjunto de todas las fichas que hizo que
+    se den vuelta horizontalmente. En caso de que el conjunto sea vacío, no modificó 
     ninguna ficha.
     """
     columna,fila = coordenada
 
     colorOpuesto = turnoOpuesto(turnoActual)
     
-    volteadasDerecha = []
-    volteadasIzquierda = []
+    volteadasDerecha = set()
+    volteadasIzquierda = set()
     
     # Recorremos hacia la derecha
     fichasOpuestas = []
@@ -329,7 +330,7 @@ def volteadasHorizontalmente(fichasJugadas,coordenada,turnoActual):
         fichasOpuestas += [(indice,fila)]
 
         if (indice + 1,fila) in fichasJugadas[turnoActual]:
-            volteadasDerecha += fichasOpuestas
+            volteadasDerecha.update(fichasOpuestas)
         
         indice += 1
 
@@ -342,22 +343,22 @@ def volteadasHorizontalmente(fichasJugadas,coordenada,turnoActual):
         fichasOpuestas += [(indice,fila)]
 
         if (indice - 1,fila) in fichasJugadas[turnoActual]:
-            volteadasIzquierda = fichasOpuestas
+            volteadasIzquierda.update(fichasOpuestas)
 
         indice -= 1
 
-    return volteadasDerecha + volteadasIzquierda
+    return (volteadasDerecha | volteadasIzquierda)
 
 
 
 
 def volteadasVerticalmente(fichasJugadas,coordenada,turnoActual):
     """
-    volteadasVerticalmente :: dict (int,int) str -> list((int,int))
+    volteadasVerticalmente :: dict (int,int) str -> set((int,int))
 
     Dadas las fichas jugadas, la coordenada donde se coloca la ficha y el turno
-    que estamos chequeando, nos devuelve una lista de todas las fichas que hizo que
-    se den vuelta verticalmente. En caso de que la lista sea vacía, no modificó 
+    que estamos chequeando, nos devuelve un conjunto de todas las fichas que hizo que
+    se den vuelta verticalmente. En caso de que el conjunto sea vacío, no modificó 
     ninguna ficha.
     """
     
@@ -365,8 +366,8 @@ def volteadasVerticalmente(fichasJugadas,coordenada,turnoActual):
 
     colorOpuesto = turnoOpuesto(turnoActual)
     
-    volteadasArriba = []
-    volteadasAbajo = []
+    volteadasArriba = set()
+    volteadasAbajo = set()
     
     # Recorremos hacia arriba
     fichasOpuestas = []
@@ -377,7 +378,7 @@ def volteadasVerticalmente(fichasJugadas,coordenada,turnoActual):
         fichasOpuestas += [(columna,indice)]
 
         if (columna,indice + 1) in fichasJugadas[turnoActual]:
-            volteadasArriba += fichasOpuestas
+            volteadasArriba.update(fichasOpuestas)
 
         indice += 1
 
@@ -390,11 +391,11 @@ def volteadasVerticalmente(fichasJugadas,coordenada,turnoActual):
         fichasOpuestas += [(columna,indice)]
 
         if (columna,indice - 1) in fichasJugadas[turnoActual]:
-            volteadasAbajo = fichasOpuestas
+            volteadasAbajo.update(fichasOpuestas)
 
         indice -= 1
 
-    return volteadasArriba + volteadasAbajo
+    return volteadasArriba | volteadasAbajo
 
 
 
@@ -402,20 +403,20 @@ def volteadasVerticalmente(fichasJugadas,coordenada,turnoActual):
 
 def volteadasDiagonalDescendiente(fichasJugadas,coordenada,turnoActual):
     """
-    volteadasDiagonalDescendiente :: dict (int,int) str -> list((int,int))
+    volteadasDiagonalDescendiente :: dict (int,int) str -> set((int,int))
 
     Dadas las fichas jugadas, la coordenada donde se coloca la ficha y el turno
-    que estamos chequeando, nos devuelve una lista de todas las fichas que hizo que
+    que estamos chequeando, nos devuelve un conjunto de todas las fichas que hizo que
     se den vuelta en la diagonal descendiente.
-    En caso de que la lista sea vacía, no modificó ninguna ficha.
+    En caso de que el conjunto sea vacío, no modificó ninguna ficha.
     """
     
     columna,fila = coordenada
 
     colorOpuesto = turnoOpuesto(turnoActual)
     
-    volteadasMitad1 = []
-    volteadasMitad2 = []
+    volteadasMitad1 = set()
+    volteadasMitad2 = set()
     
     # Recorremos hacia una mitad
     fichasOpuestas = []
@@ -427,7 +428,7 @@ def volteadasDiagonalDescendiente(fichasJugadas,coordenada,turnoActual):
         fichasOpuestas += [(indiceX,indiceY)]
 
         if (indiceX + 1,indiceY + 1) in fichasJugadas[turnoActual]:
-            volteadasMitad1 += fichasOpuestas
+            volteadasMitad1.update(fichasOpuestas)
 
         indiceX += 1
         indiceY += 1
@@ -442,31 +443,31 @@ def volteadasDiagonalDescendiente(fichasJugadas,coordenada,turnoActual):
         fichasOpuestas += [(indiceX,indiceY)]
 
         if (indiceX - 1,indiceY - 1) in fichasJugadas[turnoActual]:
-            volteadasMitad2 = fichasOpuestas
+            volteadasMitad2.update(fichasOpuestas)
 
         indiceX -= 1
         indiceY -= 1
 
-    return volteadasMitad1 + volteadasMitad2
+    return volteadasMitad1 | volteadasMitad2
 
 
 
 def volteadasDiagonalAscendiente(fichasJugadas,coordenada,turnoActual):
     """
-    volteadasDiagonalAscendiente :: dict (int,int) str -> list((int,int))
+    volteadasDiagonalAscendiente :: dict (int,int) str -> set((int,int))
 
     Dadas las fichas jugadas, la coordenada donde se coloca la ficha y el turno
-    que estamos chequeando, nos devuelve una lista de todas las fichas que hizo que
+    que estamos chequeando, nos devuelve un conjunto de todas las fichas que hizo que
     se den vuelta en la diagonal ascendiente.
-    En caso de que la lista sea vacía, no modificó ninguna ficha.
+    En caso de que el conjunto sea sea vacío, no modificó ninguna ficha.
     """
     
     columna,fila = coordenada
 
     colorOpuesto = turnoOpuesto(turnoActual)
     
-    volteadasMitad1 = []
-    volteadasMitad2 = []
+    volteadasMitad1 = set()
+    volteadasMitad2 = set()
     
     # Recorremos hacia una mitad
     fichasOpuestas = []
@@ -478,7 +479,7 @@ def volteadasDiagonalAscendiente(fichasJugadas,coordenada,turnoActual):
         fichasOpuestas += [(indiceX,indiceY)]
 
         if (indiceX + 1,indiceY - 1) in fichasJugadas[turnoActual]:
-            volteadasMitad1 += fichasOpuestas
+            volteadasMitad1.update(fichasOpuestas)
 
         indiceX += 1
         indiceY -= 1
@@ -493,12 +494,12 @@ def volteadasDiagonalAscendiente(fichasJugadas,coordenada,turnoActual):
         fichasOpuestas += [(indiceX,indiceY)]
 
         if (indiceX - 1,indiceY + 1) in fichasJugadas[turnoActual]:
-            volteadasMitad2 = fichasOpuestas
+            volteadasMitad2.update(fichasOpuestas)
         
         indiceX -= 1
         indiceY += 1
 
-    return volteadasMitad1 + volteadasMitad2
+    return volteadasMitad1 | volteadasMitad2
 
 
 
@@ -511,4 +512,16 @@ def turnoOpuesto(turnoActual):
     """
 
     return "B" if turnoActual == "N" else "N"
+
+
+
+def normalizarLectura(jugada):
+    """
+    normalizarLectura :: str -> str
+       
+    Dado un string de un renglón del archivo de juego, nos devuelve el mismo
+    string pero quitándole la terminación del salto de línea '\n'.
+    """
+    
+    return jugada[:-1]
 

@@ -23,7 +23,7 @@ def main():
 
     jugador1 = jugador(archivo.readline()) #fila 1 correspondiente al jugador 1
     jugador2 = jugador(archivo.readline()) #fila 2 correspondiente al jugador 2
-    turnoInicial = archivo.readline()[:-1] # Eliminamos el '\n' con [:-1] de la fila 3
+    turnoInicial = normalizarLectura(archivo.readline())
 
     print('El jugador 1 es', jugador1[0], 'con el color', jugador1[1])
     print('El jugador 2 es', jugador2[0], 'con el color', jugador2[1])
@@ -45,14 +45,16 @@ def main():
 
     jugadasPosibles = posicionesPermitidas(turnoActual,fichasJugadas) # Vemos las posiciones válidas
     
-    jugadaActual = archivo.readline() # Leo la jugada en formato string
+    jugadaActual = normalizarLectura(archivo.readline()) # Leo la jugada en formato string
     
     while jugadaVerifica(jugadaActual,jugadasPosibles):
 
         jugadaActual = convertirCoordenadas(jugadaActual) 
-
-        fichasModificadas = fichasVolteadas(fichasJugadas,turnoActual,jugadaActual) + [jugadaActual] # Que fichas se dan vuelta
-
+    
+        fichasModificadas = fichasVolteadas(fichasJugadas,turnoActual,jugadaActual)# Que fichas se dan vuelta
+        
+        fichasModificadas.update({jugadaActual}) # Agregamos la ficha actual para darla vuelta
+        
         if len(fichasModificadas) != 1: # Vemos que la jugada actual no sea un salteo de turno
          
             tablero = darVueltaFichasTablero(tablero,turnoActual,fichasModificadas) # Modificamos nuestro tablero
@@ -65,7 +67,7 @@ def main():
 
         jugadasPosibles = posicionesPermitidas(turnoActual,fichasJugadas) # Vemos las posiciones válidas
 
-        jugadaActual = archivo.readline() # Leemos la nueva jugada
+        jugadaActual = normalizarLectura(archivo.readline()) # Leemos la nueva jugada
         
     archivo.close()
     

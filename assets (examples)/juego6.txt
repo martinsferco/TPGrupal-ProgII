@@ -1,6 +1,6 @@
-Montano,N
-Ludovico,B
-B
+Montano, N
+Ludovico, B
+N
 C4
 C3
 C2
