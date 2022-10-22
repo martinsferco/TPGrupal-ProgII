@@ -14,11 +14,6 @@ def test_inicializarFichasJugadas():
 
 # Tests de funciones de verificación de archivos
 
-def test_verificaDatos():
-    pass
-
-
-
 def test_ingresaArchivo():
 
     assert ingresaArchivo('juego1')

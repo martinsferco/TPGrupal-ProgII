@@ -30,9 +30,7 @@ def main():
     jugador2 = jugador(archivo.readline()) #fila 2 correspondiente al jugador 2
     turnoInicial = normalizarLectura(archivo.readline())
 
-    print('\nEl jugador 1 es', jugador1[0], 'con el color', jugador1[1])
-    print('El jugador 2 es', jugador2[0], 'con el color', jugador2[1])
-    print('Inicia el color', turnoInicial)
+    informacionJugadores(jugador1,jugador2,turnoInicial)
 
     tam_tablero = 8
 
@@ -44,12 +42,13 @@ def main():
 
     jugadasPosibles = posicionesPermitidas(turnoActual,fichasJugadas,tam_tablero) # Vemos las posiciones válidas
     
-    jugadaActual = normalizarLectura(archivo.readline()) # Leo la jugada en formato string
+    jugadaActual = (archivo.readline()).upper() # Leemos la primer jugada
+
+ 
+    while jugadaActual != "" and numeroFichasColocadas < 64 and jugadaVerifica(jugadaActual,jugadasPosibles,fichasJugadas):
     
-    while jugadaVerifica(jugadaActual,jugadasPosibles,fichasJugadas) and numeroFichasColocadas < 64:
-        
         jugadaActual = convertirCoordenadas(jugadaActual) 
-    
+        
         fichasModificadas = fichasVolteadas(fichasJugadas,turnoActual,jugadaActual,tam_tablero)# Que fichas se dan vuelta
         
         fichasModificadas.update({jugadaActual}) # Agregamos la ficha actual para darla vuelta
@@ -64,12 +63,12 @@ def main():
 
         jugadasPosibles = posicionesPermitidas(turnoActual,fichasJugadas,tam_tablero) # Vemos las nuevas posiciones válidas
 
-        jugadaActual = normalizarLectura(archivo.readline()) # Leemos la nueva jugada
+        jugadaActual = archivo.readline().upper() # Leemos la nueva jugada
         
     
     archivo.close()    
     
-    
+    mensajeFinalJuego(jugadaActual,fichasJugadas,turnoActual)    
 
     mostrarTablero(fichasJugadas,tam_tablero)
 

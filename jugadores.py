@@ -18,10 +18,10 @@ def verificaDatos(archivo):
     
     linea = normalizarLectura(archivo.readline()) # linea 3 (color que inicia)
    
-    if not coloresCorrectos(jugador1, jugador2): # SI LOS COLORES DE AMBOS SON IGUALES o DIFERENTES DE N Y B, TERMINA
+    if not coloresCorrectos(jugador1, jugador2): 
         return False
 
-    if linea != 'N' and linea != 'B': # SI EL COLOR QUE INICIA ES INCORRECTO, TERMINA
+    if linea != 'N' and linea != 'B': 
         print('El color que inicia es invalido.')
         return False
     

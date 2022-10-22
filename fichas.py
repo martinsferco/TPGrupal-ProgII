@@ -1,3 +1,5 @@
+from mensajes import *
+
 def verificacionFormato(coordenada):
     """
     verificacionFormato :: str -> bool
@@ -7,8 +9,8 @@ def verificacionFormato(coordenada):
     como segundo. También verifica que dicho string, tenga exactamente
     una longitud de dos.
     """
-    
-    if len(coordenada) != 2: # No verifica que tenga dos coordenadas 
+   
+    if len(normalizarLectura(coordenada)) != 2: # No verifica que tenga dos coordenadas 
         return False
     
     columna, fila = coordenada[0],coordenada[1]
@@ -52,7 +54,7 @@ def convertirCoordenadas(coordenada):
     la asociaremos con la coordenada (-1,-1).
     """
     
-    if coordenada == '': return (-1,-1)
+    if coordenada == '\n': return (-1,-1)
 
     columnas = ['A','B','C','D','E','F','G','H']
 
@@ -185,30 +187,30 @@ def jugadaVerifica(jugadaActual,jugadasPosibles,fichasJugadas):
     realizar, nos determina si la jugada que se realizó es correcta o no.
     """
     
-    if jugadaActual == '': # Cuando la jugada es un Salto de turno
+    if jugadaActual == '\n': # Cuando la jugada es un Salto de turno
         
         if jugadasPosibles != set():
-            print ("\nSe salteó el turno cuando había jugadas posibles.")
+            errorJugada(jugadaActual,"salteo")
             return False
 
         return True
 
     if not verificacionFormato(jugadaActual):
-        print(f'\nLa jugada {jugadaActual} no cumple con el formato estipulado.')
+        errorJugada(jugadaActual,"formato")
         return False
 
     if not verificacionRango(jugadaActual):
-        print(f'\nLa jugada {jugadaActual} se sale fuera del rango del tablero.')
+        errorJugada(jugadaActual,"rango")
         return False
    
     coordenada = convertirCoordenadas(jugadaActual)
     
     if ocupada(fichasJugadas,coordenada):
-        print(f'\nLa jugada {jugadaActual} cae sobre una casilla ya ocupada.')
+        errorJugada(jugadaActual,"ocupada")
         return False
 
     if coordenada not in jugadasPosibles:
-        print(f'\nLa jugada {jugadaActual} no se encuentra de las jugadas posibles.')
+        errorJugada(jugadaActual,"imposible")
         return False
 
     return True
@@ -447,13 +449,14 @@ def turnoOpuesto(turnoActual):
 
 
 
-def normalizarLectura(jugada):
+def normalizarLectura(string):
     """
     normalizarLectura :: str -> str
        
     Dado un string de un renglón del archivo de juego, nos devuelve el mismo
-    string pero quitándole la terminación del salto de línea '\n' y haciendo
-    que todas las letras sean mayúsculas.
+    string pero quitándole la terminación del salto de línea '\n'.
+    También lo transforma en mayúsculas.
     """
     
-    return jugada[:-1].upper()
+    return string[:-1].upper()
+
