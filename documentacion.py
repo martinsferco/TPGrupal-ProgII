@@ -110,5 +110,15 @@
 #       Relacionado con la representación de las fichas, cuando nos encontremos una 
 #   jugadas que se encuentra fuera de rango, la asociaremos con la tupla (-1,-1),ya 
 #   estas coordenadas no hacen referencia a ninguna del tablero.
-                         
+#   
+#  Archivos de assets:  
+#  
+#  juego1.txt: Ficha colocada en un lugar ocupado
+#  juego2.txt: Ficha colocada en un lugar si una ficha del otro colro tangente a ella
+#  juego3.txt: Ficha colocada en un lugar ocupado
+#  juego4.txt: Ficha fuera del tablero
+#  juego5.txt: Turno mal salteado
+#  juego6.txt: ?
+#  juego7.txt: Gana el color negro porque el blanco se quedo sin jugadas posibles
+#  juego8.txt: ?
    

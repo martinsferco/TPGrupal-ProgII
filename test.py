@@ -44,11 +44,13 @@ def test_coloresCorrectos():
 # Test de funciones de ingreso de archivo
 
 def test_ingresaArchivo():
+    juego1 = 'assets (examples)\juego1'
+    juego2 = 'assets (examples)\juego2'
 
-    assert ingresaArchivo('juego1') == True
+    assert ingresaArchivo(juego1) == True
     assert ingresaArchivo('hola') == False
     assert ingresaArchivo('lcc') == False
-    assert ingresaArchivo('juego2') == True
+    assert ingresaArchivo(juego2) == True
 
 
 
