@@ -177,9 +177,9 @@ def fichasVolteadas(fichasJugadas,turnoActual,coordenada,tam_tablero):
 
 
 
-def jugadaVerifica(jugadaActual,jugadasPosibles):
+def jugadaVerifica(jugadaActual,jugadasPosibles,fichasJugadas):
     """
-    jugadaVerifica :: str set((int,int)) -> bool
+    jugadaVerifica :: str set((int,int)) dict(str:set((int,int))) -> bool
 
     Dada la jugada actual leída del archivo de juego, y las posibles jugadas para
     realizar, nos determina si la jugada que se realizó es correcta o no.
@@ -188,23 +188,27 @@ def jugadaVerifica(jugadaActual,jugadasPosibles):
     if jugadaActual == '': # Cuando la jugada es un Salto de turno
         
         if jugadasPosibles != set():
-            print ("Se salteó el turno cuando había jugadas posibles.")
+            print ("\nSe salteó el turno cuando había jugadas posibles.")
             return False
 
         return True
 
     if not verificacionFormato(jugadaActual):
-        print("La jugada no cumple con el formato estipulado.")
+        print(f'\nLa jugada {jugadaActual} no cumple con el formato estipulado.')
         return False
 
     if not verificacionRango(jugadaActual):
-        print("La jugada se sale fuera del rango del tablero.")
+        print(f'\nLa jugada {jugadaActual} se sale fuera del rango del tablero.')
         return False
    
     coordenada = convertirCoordenadas(jugadaActual)
     
+    if ocupada(fichasJugadas,coordenada):
+        print(f'\nLa jugada {jugadaActual} cae sobre una casilla ya ocupada.')
+        return False
+
     if coordenada not in jugadasPosibles:
-        print("La jugada no se encuentra de las jugadas posibles.")
+        print(f'\nLa jugada {jugadaActual} no se encuentra de las jugadas posibles.')
         return False
 
     return True

@@ -67,7 +67,8 @@
 #   que ingresemos el nombre del archivo de la partida que queremos ejecutar.
 #   En caso de que se ingrese un nombre de archivo inválido, nos seguirá 
 #   pidiendo hasta que ingresemos uno existente. Todas los archivos de juego
-#   son de extensión txt.
+#   son de extensión txt y SE DEBEN COLOCAR DENTRO DE LA CARPETA DE ASSETS 
+#   para que el programa los encuentre.
 #                       
 #   # Finalización del programa: 
 #                                Una vez que ejecutemos el archivo main.py, se
@@ -91,7 +92,7 @@
 #           # Coordenada fuera del rango del tablero.
 #           # Se colocó una ficha en un lugar donde no puede ir. En términos
 #             del juego, dicha ficha no realiza cambios en el número de fichas.
-#           # Se saltea cuando no se debe saltar (consultar).
+#           # Se saltea cuando no se debe saltar.
 #       
 #
 #   # Análisis de información de jugadores:
