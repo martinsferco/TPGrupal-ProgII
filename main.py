@@ -7,10 +7,12 @@ def main():
 
     nombreArchivo = input("Introduzca el archivo de jugadas: ")
 
-    while not ingresaArchivo(nombreArchivo): #SI EL ARCHIVO NO SE ENCUENTRA LO SIGUE PIDIENDO.
+    while not ingresaArchivo(nombreArchivo): # Seguimos pidiendo el archivo si no se encuentra.
         nombreArchivo = input("Introduzca el archivo de jugadas: ")
+    
+    rutaArchivo = 'assets/' + nombreArchivo + '.txt'
 
-    archivo = open(nombreArchivo + '.txt', 'r') #UNA VEZ ENCONTRADO EL ARCHIVO, LO ABRE
+    archivo = open(rutaArchivo, 'r') # Abre el archivo una vez encontrado
 
     if not verificaDatos(archivo): # Si alguno de los datos preliminares es incorrecto no ejecutamos nada.
         print('El archivo ingresado tiene fallos. No se podrá jugar la partida.')
@@ -31,48 +33,38 @@ def main():
 
     # A partir de ahora, ya tenemos las condiciones de inicio, los jugadores y el color que arranca.
     
+    tam_tablero = 8
 
-
-
-
-
-    # Ver si le pasamos el tamaño
-    tablero = inicializarTablero()
-    
-    fichasJugadas = {"B":{(3,3),(4,4)},"N":{(3,4),(4,3)}}
+    fichasJugadas = inicializarFichasJugadas(tam_tablero)
 
     turnoActual = turnoInicial 
 
-    jugadasPosibles = posicionesPermitidas(turnoActual,fichasJugadas) # Vemos las posiciones válidas
+    jugadasPosibles = posicionesPermitidas(turnoActual,fichasJugadas,tam_tablero) # Vemos las posiciones válidas
     
     jugadaActual = normalizarLectura(archivo.readline()) # Leo la jugada en formato string
     
     while jugadaVerifica(jugadaActual,jugadasPosibles):
-
+        
         jugadaActual = convertirCoordenadas(jugadaActual) 
-    
-        fichasModificadas = fichasVolteadas(fichasJugadas,turnoActual,jugadaActual)# Que fichas se dan vuelta
+        print(jugadaActual)
+        fichasModificadas = fichasVolteadas(fichasJugadas,turnoActual,jugadaActual,tam_tablero)# Que fichas se dan vuelta
         
         fichasModificadas.update({jugadaActual}) # Agregamos la ficha actual para darla vuelta
         
         if len(fichasModificadas) != 1: # Vemos que la jugada actual no sea un salteo de turno
          
-            tablero = darVueltaFichasTablero(tablero,turnoActual,fichasModificadas) # Modificamos nuestro tablero
-    
             fichasJugadas = actualizarFichasJugadas(fichasJugadas,fichasModificadas,turnoActual) # Modificamos fichas
         
-        mostrarTablero(tablero)
-
+    
         turnoActual = turnoOpuesto(turnoActual) # Cambiamos el turno
 
-        jugadasPosibles = posicionesPermitidas(turnoActual,fichasJugadas) # Vemos las posiciones válidas
+        jugadasPosibles = posicionesPermitidas(turnoActual,fichasJugadas,tam_tablero) # Vemos las nuevas posiciones válidas
 
         jugadaActual = normalizarLectura(archivo.readline()) # Leemos la nueva jugada
         
-    archivo.close()
+    archivo.close()    
     
-    print("Cantidad fichas: ",len(fichasJugadas["B"])+len(fichasJugadas["N"]))
-    mostrarTablero(tablero)
+    mostrarTablero(fichasJugadas,tam_tablero)
 
 
 
@@ -81,4 +73,3 @@ if __name__ == "__main__":
     main()
 
 
-#print(verificaDatos('juego3.txt'))

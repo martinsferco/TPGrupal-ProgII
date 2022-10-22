@@ -1,35 +1,37 @@
-#Inicialización tablero y mostrar tablero
-
-def inicializarTablero():
+def inicializarFichasJugadas(tam_tablero):
     """ 
-    inicializarTablero:: None -> list(List(str))
+    inicializarFichasJugadas:: int -> dict(str:set((int,int)))
 
-    La función nos devuelve un tablero de partida vacío, excepto
-    por las 4 fichas centrales.
+    La función nos devuelve un diccionario de las fichas negras y blancas jugadas,
+    colocadas inicialmente.
+    Cada una de las claves de color está relacionada con un conjunto de tuplas, que
+    representan las coordenadas de donde se encuentras las fichas del respectivo
+    color.
     """
             
     fichaBlanca = "B"
     fichaNegra = "N"
+        
+    fichasJugadas = {fichaBlanca:set(),fichaNegra:set()}
 
-
-    #Inicializamos tablero vacío
-    tablero = [ ["" for fila in range(8)] for columna in range(8)]
+    # Generamos los 2 valores de coordenadas de fichas centrales
+    coordenada1 = tam_tablero // 2
+    coordenada2 = (tam_tablero // 2) - 1
     
-    #Seteamos las fichas centrales
-    tablero[3][3] = fichaBlanca
-    tablero[4][4] = fichaBlanca
-    tablero[3][4] = fichaNegra
-    tablero[4][3] = fichaNegra
+    # Agregamos las coordenadas de las 4 fichas centrales
+    fichasJugadas[fichaBlanca].update([(coordenada1,coordenada1),(coordenada2,coordenada2)])
+    fichasJugadas[fichaNegra].update([(coordenada1,coordenada2),(coordenada2,coordenada1)])
 
-    return tablero
+    return fichasJugadas
 
 
-def mostrarTablero(tablero):
+
+def mostrarTablero(fichasJugadas,tam_tablero):
     """
-    mostrarTablero :: list(list(str)) -> None
+    mostrarTablero :: dict(str:set((int,int))) int -> None
 
-    Dado un tablero, la función imprime en pantalla una representación
-    del mismo.
+    Dadas las fichas jugadas de cada color y el tamaño del tablero,
+    la función imprime en pantalla una representación del mismo.
     """
     
     fichaBlanca = "⚪"
@@ -37,21 +39,21 @@ def mostrarTablero(tablero):
 
     #Imprimimos el tablero
 
-    for fila in range(8):
+    for fila in range(tam_tablero):
         
         print("\n-------------------------")
 
-        for columna in tablero:
+        for columna in range(tam_tablero):
 
-            if columna[fila] == "":
-                print('|  ',end = "")
-
-            if columna[fila] == "B":
+            if (columna,fila) in fichasJugadas["B"]:
                 print(f'|{fichaBlanca}',end = "")
 
-            if columna[fila] == "N":
+            elif (columna,fila) in fichasJugadas["N"]:
                 print(f'|{fichaNegra}',end = "")
-        
+             
+            else:
+                print('|  ',end = "")
+
         print('|',end = "")
 
     print("\n-------------------------")
