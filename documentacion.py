@@ -114,12 +114,14 @@
 #   
 #  Archivos de assets:  
 #  
-#  juego1.txt: Ficha colocada en un lugar ocupado
-#  juego2.txt: Ficha colocada en un lugar si una ficha del otro colro tangente a ella
-#  juego3.txt: Ficha colocada en un lugar ocupado
-#  juego4.txt: Ficha fuera del tablero
-#  juego5.txt: Turno mal salteado
-#  juego6.txt: ?
-#  juego7.txt: Gana el color negro porque el blanco se quedo sin jugadas posibles
-#  juego8.txt: ?
+#  juego1.txt: Ficha colocada en un lugar ocupado.
+#  juego2.txt: Ficha colocada en un lugar sin una ficha del otro colro tangente a ella.
+#  juego3.txt: Ficha colocada en un lugar ocupado.
+#  juego4.txt: Ficha fuera del tablero.
+#  juego5.txt: Turno mal salteado.
+#  juego6.txt: Turno mal salteado.
+#  juego7.txt: Partida incompleta, por lo que no se puede determinar un ganador.
+#  juego8.txt: Gana el jugador de las fichas negras porque el blanco se queda sin fichas en el tablero 
+#  juegofinal.txt: Gana el jugador de las fichas blancas
+#  juegoGanadoN.txt: Gana el jugador de las fichas negras
    

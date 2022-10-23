@@ -34,8 +34,8 @@ def mostrarTablero(fichasJugadas,tam_tablero):
     la función imprime en pantalla una representación del mismo.
     """
     
-    fichaBlanca = "⚪"
-    fichaNegra = "⚫"
+    fichaBlanca = "B "
+    fichaNegra = "N "
 
     #Imprimimos el tablero
 
