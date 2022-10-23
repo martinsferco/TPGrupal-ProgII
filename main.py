@@ -4,6 +4,9 @@ from tablero import *
 from fichas import *
 from mensajes import *
 
+# IMPORTANTE: los archivos de juego deben ir en la carpeta /assets para que 
+# el programa los encuentre.
+
 def main():
 
     nombreArchivo = input("\nIntroduzca el archivo de jugadas (sin extensión .txt): ")
@@ -11,9 +14,9 @@ def main():
     while not ingresaArchivo(nombreArchivo): # Seguimos pidiendo el archivo si no se encuentra.
         nombreArchivo = input("\nIntroduzca nuevamente el archivo de jugadas: ")
     
-    rutaArchivo = 'assets/' + nombreArchivo + '.txt'
+    rutaArchivo = 'assets/' + nombreArchivo + '.txt' # Ruta de archivo y extensión.
 
-    archivo = open(rutaArchivo, 'r') # Abre el archivo una vez encontrado
+    archivo = open(rutaArchivo, 'r') # Abre el archivo una vez encontrado.
     
     mensajeProcesamientoArchivo(nombreArchivo)
 
@@ -26,9 +29,9 @@ def main():
 
     archivo.seek(0) # Volvemos al comienzo del archivo.
 
-    jugador1 = jugador(archivo.readline()) #fila 1 correspondiente al jugador 1
-    jugador2 = jugador(archivo.readline()) #fila 2 correspondiente al jugador 2
-    turnoInicial = normalizarLectura(archivo.readline())
+    jugador1 = jugador(archivo.readline()) # Fila 1 correspondiente al jugador 1
+    jugador2 = jugador(archivo.readline()) # Fila 2 correspondiente al jugador 2
+    turnoInicial = normalizarLectura(archivo.readline()) # Fila 3 correspondiente al turno
 
     informacionJugadores(jugador1,jugador2,turnoInicial)
 
@@ -74,8 +77,5 @@ def main():
 
 
 
-
 if __name__ == "__main__":
     main()
-
-

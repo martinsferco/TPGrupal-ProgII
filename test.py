@@ -37,6 +37,7 @@ def test_coloresCorrectos():
     assert coloresCorrectos(('Martin', 'N'), ('Raul', 'B')) 
     assert coloresCorrectos(('Martin', 'B'), ('Raul', 'N')) 
     assert not coloresCorrectos(('Martin', 'R'), ('Raul', 'V'))
+    assert not coloresCorrectos(('Martin', 'N'), ('Raul', 'V'))
     assert not coloresCorrectos(('Martin','B'),('Raul','B')) 
 
 
@@ -45,11 +46,11 @@ def test_coloresCorrectos():
 
 def test_verificacionFormato():
     
-    assert not verificacionFormato("B23")
-    assert not verificacionFormato("AA2")
-    assert not verificacionFormato("22")
-    assert not verificacionFormato("AA")
-    assert verificacionFormato("A1")
+    assert not verificacionFormato("B23\n")
+    assert not verificacionFormato("AA2\n")
+    assert not verificacionFormato("22\n")
+    assert not verificacionFormato("AA\n")
+    assert verificacionFormato("A1\n")
 
 
 
@@ -109,16 +110,18 @@ def test_vecinasLibres():
 def test_jugadaVerifica():
     posicionesPermitidas1 = {(4,2),(2,4),(3,5),(5,3)}
     posicionesPermitidas2 = set()
+    fichasJugadas = {"B":{(4,4),(3,3)},"N":{(4,3),(3,4)}}
 
-    assert not jugadaVerifica("55",posicionesPermitidas1) 
-    assert not jugadaVerifica("BB",posicionesPermitidas1)
-    assert not jugadaVerifica("ZZ1",posicionesPermitidas1)
-    assert not jugadaVerifica("A9",posicionesPermitidas1)
-    assert not jugadaVerifica("Z2",posicionesPermitidas1)
-    assert not jugadaVerifica("",posicionesPermitidas1)
-    assert jugadaVerifica("",posicionesPermitidas2)
-    assert jugadaVerifica("E3",posicionesPermitidas1)
-    assert not jugadaVerifica("A1",posicionesPermitidas1)
+    assert not jugadaVerifica("55\n",posicionesPermitidas1,fichasJugadas) 
+    assert not jugadaVerifica("BB\n",posicionesPermitidas1,fichasJugadas)
+    assert not jugadaVerifica("ZZ1\n",posicionesPermitidas1,fichasJugadas)
+    assert not jugadaVerifica("A9\n",posicionesPermitidas1,fichasJugadas)
+    assert not jugadaVerifica("Z2\n",posicionesPermitidas1,fichasJugadas)
+    assert not jugadaVerifica("\n",posicionesPermitidas1,fichasJugadas)
+    assert not jugadaVerifica("A1\n",posicionesPermitidas1,fichasJugadas)
+    assert not jugadaVerifica("D5\n",posicionesPermitidas1,fichasJugadas)
+    assert jugadaVerifica("\n",posicionesPermitidas2,fichasJugadas)
+    assert jugadaVerifica("E3\n",posicionesPermitidas1,fichasJugadas)
 
 
 
