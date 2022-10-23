@@ -22,7 +22,7 @@ def errorJugada(jugada,error):
     if jugada == "\n":
         print("Se encontro un error en una jugada.")
     else:
-        print(f'Se encontro un error en la jugada {jugada}.')
+        print(f'Se encontro un error en la jugada {jugada[:-1]}.')
 
 
     if error == "salteo":
@@ -69,6 +69,7 @@ def mensajeFinalJuego(jugadaFinal,fichasJugadas,turnoActual):
     cantidadFichasNegras = len(fichasJugadas["N"])
     cantidadFichasJugadas = cantidadFichasBlancas + cantidadFichasNegras
     
+    # Vemos si se colocaron todas las fichas
     if cantidadFichasJugadas == 64:
         print("La partida terminó satisfactoriamente.")
 
@@ -82,8 +83,19 @@ def mensajeFinalJuego(jugadaFinal,fichasJugadas,turnoActual):
             print("Los dos jugadores empataron!")
 
     else:
-        if jugadaFinal == "":
+        # Vemos si alguno de los jugadores se quedaron sin fichas.
+        if cantidadFichasBlancas == 0:
+            print("El jugador blanco se quedó sin fichas.")
+            print("Gano el jugador de las fichas negras!")
+
+        elif cantidadFichasNegras == 0:
+            print("El jugador negro se quedó sin fichas.")
+            print("Gano el jugador de las fichas blancas!")
+
+        # Vemos si la partida termina a medias.
+        elif jugadaFinal == "":
             print("La partida no se finalizó. No podemos determinar un ganador.")
 
+        # Vemos si la partida terminó debido a un error.
         else:
             print(f"El error fue cometido por el jugador de las fichas {turnoActual}.")
