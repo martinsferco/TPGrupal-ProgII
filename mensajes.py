@@ -22,7 +22,7 @@ def errorJugada(jugada,error):
     if jugada == "\n":
         print("Se encontro un error en una jugada.")
     else:
-        print(f'Se encontro un error en la jugada {jugada[:-1]}.')
+        print(f'Se encontro un error en la jugada {jugada}.')
 
 
     if error == "salteo":
