@@ -1,3 +1,7 @@
+# LICENCIATURA EN CIENCIAS DE LA COMPUTACION - Programacion II 2022
+# Trabajo Grupal Python
+# Integrantes: Sferco Martin, Sosa Valentin
+#
 # En este archivo presentaremos el diseño de los datos y como los 
 # modelamos dentro del programa. También hablaremos sobre las decisiones
 # que tomamos en cuanto a el manejo de datos y  como enfocaremos la 
